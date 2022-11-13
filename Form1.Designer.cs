@@ -30,6 +30,7 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkboxShowOnlyFoundIDsInResultFiles = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.textBoxCsvDelimiter = new System.Windows.Forms.TextBox();
             this.checkBox2 = new System.Windows.Forms.CheckBox();
@@ -52,6 +53,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.checkboxShowOnlyFoundIDsInResultFiles);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.textBoxCsvDelimiter);
             this.groupBox1.Controls.Add(this.checkBox2);
@@ -63,26 +65,37 @@
             this.groupBox1.Controls.Add(this.ownIDsPath);
             this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(673, 162);
+            this.groupBox1.Size = new System.Drawing.Size(673, 131);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Settings";
             // 
+            // checkboxShowOnlyFoundIDsInResultFiles
+            // 
+            this.checkboxShowOnlyFoundIDsInResultFiles.AutoSize = true;
+            this.checkboxShowOnlyFoundIDsInResultFiles.Checked = global::Qubic_Resultfilter.Properties.Settings.Default.showOwnIDsWithoutValueFound;
+            this.checkboxShowOnlyFoundIDsInResultFiles.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Qubic_Resultfilter.Properties.Settings.Default, "showOwnIDsWithoutValueFound", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            this.checkboxShowOnlyFoundIDsInResultFiles.Location = new System.Drawing.Point(225, 101);
+            this.checkboxShowOnlyFoundIDsInResultFiles.Name = "checkboxShowOnlyFoundIDsInResultFiles";
+            this.checkboxShowOnlyFoundIDsInResultFiles.Size = new System.Drawing.Size(287, 17);
+            this.checkboxShowOnlyFoundIDsInResultFiles.TabIndex = 9;
+            this.checkboxShowOnlyFoundIDsInResultFiles.Text = "Also show own IDs without any found value in result file";
+            this.checkboxShowOnlyFoundIDsInResultFiles.UseVisualStyleBackColor = true;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 127);
+            this.label1.Location = new System.Drawing.Point(222, 74);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(174, 13);
             this.label1.TabIndex = 8;
             this.label1.Text = "CSV file delimiter (input and output):";
-            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // textBoxCsvDelimiter
             // 
             this.textBoxCsvDelimiter.DataBindings.Add(new System.Windows.Forms.Binding("Text", global::Qubic_Resultfilter.Properties.Settings.Default, "csvDelimiter", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.textBoxCsvDelimiter.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBoxCsvDelimiter.Location = new System.Drawing.Point(186, 115);
+            this.textBoxCsvDelimiter.Location = new System.Drawing.Point(402, 67);
             this.textBoxCsvDelimiter.MaxLength = 2;
             this.textBoxCsvDelimiter.Name = "textBoxCsvDelimiter";
             this.textBoxCsvDelimiter.Size = new System.Drawing.Size(25, 31);
@@ -94,7 +107,7 @@
             this.checkBox2.AutoSize = true;
             this.checkBox2.Checked = global::Qubic_Resultfilter.Properties.Settings.Default.autoProcessWhenDroppedOrLoaded;
             this.checkBox2.DataBindings.Add(new System.Windows.Forms.Binding("Checked", global::Qubic_Resultfilter.Properties.Settings.Default, "autoProcessWhenDroppedOrLoaded", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
-            this.checkBox2.Location = new System.Drawing.Point(6, 96);
+            this.checkBox2.Location = new System.Drawing.Point(6, 101);
             this.checkBox2.Name = "checkBox2";
             this.checkBox2.Size = new System.Drawing.Size(196, 17);
             this.checkBox2.TabIndex = 6;
@@ -170,7 +183,7 @@
             this.groupBox2.Controls.Add(this.btnSelectRewardsFile);
             this.groupBox2.Controls.Add(this.btnRunAgain);
             this.groupBox2.Controls.Add(this.textBoxRewardsFile);
-            this.groupBox2.Location = new System.Drawing.Point(12, 180);
+            this.groupBox2.Location = new System.Drawing.Point(12, 149);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(673, 74);
             this.groupBox2.TabIndex = 2;
@@ -221,9 +234,9 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.listBoxLog);
-            this.groupBox3.Location = new System.Drawing.Point(12, 260);
+            this.groupBox3.Location = new System.Drawing.Point(12, 229);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(673, 162);
+            this.groupBox3.Size = new System.Drawing.Size(673, 164);
             this.groupBox3.TabIndex = 6;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Log";
@@ -233,7 +246,7 @@
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(694, 434);
+            this.ClientSize = new System.Drawing.Size(694, 401);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -272,6 +285,7 @@
         private System.Windows.Forms.CheckBox checkBox2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox textBoxCsvDelimiter;
+        private System.Windows.Forms.CheckBox checkboxShowOnlyFoundIDsInResultFiles;
     }
 }
 

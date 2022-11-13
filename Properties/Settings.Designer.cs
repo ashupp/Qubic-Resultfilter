@@ -106,5 +106,17 @@ namespace Qubic_Resultfilter.Properties {
                 this["csvDelimiter"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool showOwnIDsWithoutValueFound {
+            get {
+                return ((bool)(this["showOwnIDsWithoutValueFound"]));
+            }
+            set {
+                this["showOwnIDsWithoutValueFound"] = value;
+            }
+        }
     }
 }

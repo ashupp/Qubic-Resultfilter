@@ -10,6 +10,7 @@ using System.Dynamic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Qubic_Resultfilter
 {
@@ -164,7 +165,8 @@ namespace Qubic_Resultfilter
 
                 foreach (var line in currentFileLines)
                 {
-                    var revenueLine = line.Replace(" ", ";");
+                    //var revenueLine = line.Replace(" ", ";");
+                    var revenueLine = Regex.Replace(line, @"\s+", ";");
                     targetLines.Add(revenueLine);
                 }
 
@@ -348,6 +350,8 @@ namespace Qubic_Resultfilter
             // Für jeden Eintrag in der Wallet Liste 
             foreach (var walletRecord in myWalletsRecords)
             {
+                
+
                 //Log("WalletRecord: " + walletRecord.Name);
                 //Console.WriteLine("My: " + walletRecord.ID);
 
@@ -362,16 +366,22 @@ namespace Qubic_Resultfilter
 
                
 
-                var rewardsListRecords = csvRewardsList.GetRecords<dynamic>();
+                var rewardsListRecords = csvRewardsList.GetRecords<dynamic>().ToList();
+                var rewardsListCount = rewardsListRecords.Count;
 
+
+                bool walletRecordFound = false;
+                int listIterator = 0;
                 foreach (var rewardRecord in rewardsListRecords)
                 {
+                    listIterator++;
 
                     if (qubicDocumentType == QubicDocumentType.StatsBotScore)
                     {
                         if (rewardRecord.Field2.Trim() == walletRecord.ID.Trim())
                         {
                             Log("ID found: " + walletRecord.Name);
+                            walletRecordFound = true;
                             var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
@@ -388,6 +398,18 @@ namespace Qubic_Resultfilter
                             i++;
                             break;
                         }
+                        if (walletRecordFound == false && listIterator == rewardsListCount && Settings.Default.showOwnIDsWithoutValueFound)
+                        {
+                            // ID not found - empty entry
+                            dynamic record = new ExpandoObject();
+                            record.Name = walletRecord.Name;
+                            record.ID = walletRecord.ID;
+                            record.Counter = "";
+                            record.Score = "";
+                            record.DateTime = "";
+                            record.Note = "ID not found in file";
+                            newList.Add(record);
+                        }
                     }
 
                     if (qubicDocumentType == QubicDocumentType.StatsBotRevenues)
@@ -396,19 +418,33 @@ namespace Qubic_Resultfilter
                         if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
                             Log("ID found: " + walletRecord.Name);
+                            walletRecordFound = true;
                             var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
                                 record.Name = walletRecord.Name;
                                 record.ID = walletRecord.ID;
-                                record.Revenues = rewardRecord.Field3.ToString();
-                                record.RevenuePercent = rewardRecord.Field5.ToString();
-                                record.NumberOfVotes = rewardRecord.Field6.ToString() + " " + rewardRecord.Field7.ToString();
+                                record.Revenues = rewardRecord.Field2.ToString();
+                                record.RevenuePercent = rewardRecord.Field3.ToString();
+                                record.NumberOfVotes = rewardRecord.Field4.ToString() + " " + rewardRecord.Field5.ToString();
                                 newList.Add(record);
                             }
                             i++;
                             break;
+                        }
+
+                        if (walletRecordFound == false && listIterator == rewardsListCount && Settings.Default.showOwnIDsWithoutValueFound)
+                        {
+                            // ID not found - empty entry
+                            dynamic record = new ExpandoObject();
+                            record.Name = walletRecord.Name;
+                            record.ID = walletRecord.ID;
+                            record.Revenues = "";
+                            record.RevenuePercent = "";
+                            record.NumberOfVotes = "";
+                            record.Note = "ID not found in file";
+                            newList.Add(record);
                         }
                     }
 
@@ -418,6 +454,7 @@ namespace Qubic_Resultfilter
                         if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
                             Log("ID found: " + walletRecord.Name);
+                            walletRecordFound = true;
                             var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
@@ -429,6 +466,17 @@ namespace Qubic_Resultfilter
                             }
                             i++;
                             break;
+                        }
+
+                        if (walletRecordFound == false && listIterator == rewardsListCount && Settings.Default.showOwnIDsWithoutValueFound)
+                        {
+                            // ID not found - empty entry
+                            dynamic record = new ExpandoObject();
+                            record.Name = walletRecord.Name;
+                            record.ID = walletRecord.ID;
+                            record.Revenues = "";
+                            record.Note = "ID not found in file";
+                            newList.Add(record);
                         }
                     }
 
@@ -438,6 +486,7 @@ namespace Qubic_Resultfilter
                         if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
                             Log("ID found: " + walletRecord.Name);
+                            walletRecordFound = true;
                             var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
@@ -450,6 +499,17 @@ namespace Qubic_Resultfilter
                             i++;
                             break;
                         }
+
+                        if (walletRecordFound == false && listIterator == rewardsListCount && Settings.Default.showOwnIDsWithoutValueFound)
+                        {
+                            // ID not found - empty entry
+                            dynamic record = new ExpandoObject();
+                            record.Name = walletRecord.Name;
+                            record.ID = walletRecord.ID;
+                            record.Revenues = "";
+                            record.Note = "ID not found in file";
+                            newList.Add(record);
+                        }
                     }
 
                     if (qubicDocumentType == QubicDocumentType.OfficialIntermediateScores)
@@ -458,6 +518,7 @@ namespace Qubic_Resultfilter
                         if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
                             Log("ID found: " + walletRecord.Name);
+                            walletRecordFound = true;
                             var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
@@ -470,12 +531,23 @@ namespace Qubic_Resultfilter
                             i++;
                             break;
                         }
+
+                        if (walletRecordFound == false && listIterator == rewardsListCount && Settings.Default.showOwnIDsWithoutValueFound)
+                        {
+                            // ID not found - empty entry
+                            dynamic record = new ExpandoObject();
+                            record.Name = walletRecord.Name;
+                            record.ID = walletRecord.ID;
+                            record.Score = "";
+                            record.Note= "ID not found in file";
+                            newList.Add(record);
+                        }
                     }
 
                 }
 
-                // Für jeden Eintrag in der rewards Liste, durch unsere Liste gehen und den Wert ergänzen
-                //Console.WriteLine(record.ID + " - " + record.Qubics);
+
+
             }
 
 
@@ -491,9 +563,6 @@ namespace Qubic_Resultfilter
         {
             Text = Text + " - " + Assembly.GetEntryAssembly()?.GetName().Version;
             Log("Launched...");
-
-            //textBoxRewardsFile.DataBindings.Add("Text", _currentFileToAnalyze, "Value");
-            //BindingManagerBase bmText = this.BindingContext[_currentFileToAnalyze];
         }
 
         private void btnSelectRewardsFile_Click(object sender, EventArgs e)
@@ -529,9 +598,5 @@ namespace Qubic_Resultfilter
             }
         }
 
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
     }
 }
