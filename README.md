@@ -10,6 +10,8 @@
 - Type of selected rewards file is automatically detected
 - Auto-Save of resulting files.
 
+### **Download latest version:** https://github.com/ashupp/Qubic-Resultfilter/releases/latest  
+
 ### See also my Buildmachine to build many efi files fast:   
 https://github.com/ashupp/Qubic-Buildmachine
 
