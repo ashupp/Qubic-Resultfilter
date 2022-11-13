@@ -8,6 +8,7 @@ using CsvHelper;
 using Qubic_Resultfilter.Properties;
 using System.Dynamic;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 
 namespace Qubic_Resultfilter
@@ -328,23 +329,16 @@ namespace Qubic_Resultfilter
         {
             var readerMyWalletsListFile = new StreamReader(myWalletsListFile);
             var configWallet = new CsvConfiguration(CultureInfo.InvariantCulture);
-            configWallet.HasHeaderRecord = false;
+            configWallet.HasHeaderRecord = true;
             configWallet.MissingFieldFound = null;
             configWallet.Delimiter = Settings.Default.csvDelimiter;
             
 
 
             var csvWalletList = new CsvReader(readerMyWalletsListFile, configWallet);
+            
 
-            // Erst Rewards Liste laden
-            var anonymousMyWalletsListDefinition = new
-            {
-                WalletName = string.Empty,
-                WalletId = string.Empty
-            };
-
-
-            var myWalletsRecords = csvWalletList.GetRecords(anonymousMyWalletsListDefinition);
+            var myWalletsRecords = csvWalletList.GetRecords<WalletListConfig>().ToList();
 
             // Neue Liste für zukünftige CSV
             var newList = new List<object> { };
@@ -354,8 +348,8 @@ namespace Qubic_Resultfilter
             // Für jeden Eintrag in der Wallet Liste 
             foreach (var walletRecord in myWalletsRecords)
             {
-                //Log("WalletRecord: " + walletRecord.WalletName);
-                //Console.WriteLine("My: " + walletRecord.WalletId);
+                //Log("WalletRecord: " + walletRecord.Name);
+                //Console.WriteLine("My: " + walletRecord.ID);
 
                 // Den Passenden Wert in der rewards liste finden
 
@@ -375,15 +369,15 @@ namespace Qubic_Resultfilter
 
                     if (qubicDocumentType == QubicDocumentType.StatsBotScore)
                     {
-                        if (rewardRecord.Field2.Trim() == walletRecord.WalletId.Trim())
+                        if (rewardRecord.Field2.Trim() == walletRecord.ID.Trim())
                         {
-                            Log("ID found: " + walletRecord.WalletName);
-                            var searchRes = newList.Find(x => ((dynamic)x).WalletId == walletRecord.WalletId);
+                            Log("ID found: " + walletRecord.Name);
+                            var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
-                                record.Name = walletRecord.WalletName;
-                                record.WalletId = walletRecord.WalletId;
+                                record.Name = walletRecord.Name;
+                                record.ID = walletRecord.ID;
                                 record.Counter = rewardRecord.Field1.ToString();
                                 record.Score = rewardRecord.Field3.ToString() + " \t";
                                 record.DateTime = rewardRecord.Field4.ToString() + " " + rewardRecord.Field5.ToString();
@@ -399,15 +393,15 @@ namespace Qubic_Resultfilter
                     if (qubicDocumentType == QubicDocumentType.StatsBotRevenues)
                     {
 
-                        if (rewardRecord.Field1.Trim() == walletRecord.WalletId.Trim())
+                        if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
-                            Log("ID found: " + walletRecord.WalletName);
-                            var searchRes = newList.Find(x => ((dynamic)x).WalletId == walletRecord.WalletId);
+                            Log("ID found: " + walletRecord.Name);
+                            var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
-                                record.Name = walletRecord.WalletName;
-                                record.WalletId = walletRecord.WalletId;
+                                record.Name = walletRecord.Name;
+                                record.ID = walletRecord.ID;
                                 record.Revenues = rewardRecord.Field3.ToString();
                                 record.RevenuePercent = rewardRecord.Field5.ToString();
                                 record.NumberOfVotes = rewardRecord.Field6.ToString() + " " + rewardRecord.Field7.ToString();
@@ -421,15 +415,15 @@ namespace Qubic_Resultfilter
                     if (qubicDocumentType == QubicDocumentType.OfficialRewards)
                     {
 
-                        if (rewardRecord.Field1.Trim() == walletRecord.WalletId.Trim())
+                        if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
-                            Log("ID found: " + walletRecord.WalletName);
-                            var searchRes = newList.Find(x => ((dynamic)x).WalletId == walletRecord.WalletId);
+                            Log("ID found: " + walletRecord.Name);
+                            var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
-                                record.Name = walletRecord.WalletName;
-                                record.WalletId = walletRecord.WalletId;
+                                record.Name = walletRecord.Name;
+                                record.ID = walletRecord.ID;
                                 record.Revenues = rewardRecord.Field2.ToString();
                                 newList.Add(record);
                             }
@@ -441,15 +435,15 @@ namespace Qubic_Resultfilter
                     if (qubicDocumentType == QubicDocumentType.OfficialIntermediateRevenues)
                     {
 
-                        if (rewardRecord.Field1.Trim() == walletRecord.WalletId.Trim())
+                        if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
-                            Log("ID found: " + walletRecord.WalletName);
-                            var searchRes = newList.Find(x => ((dynamic)x).WalletId == walletRecord.WalletId);
+                            Log("ID found: " + walletRecord.Name);
+                            var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
-                                record.Name = walletRecord.WalletName;
-                                record.WalletId = walletRecord.WalletId;
+                                record.Name = walletRecord.Name;
+                                record.ID = walletRecord.ID;
                                 record.Revenues = rewardRecord.Field2.ToString();
                                 newList.Add(record);
                             }
@@ -461,15 +455,15 @@ namespace Qubic_Resultfilter
                     if (qubicDocumentType == QubicDocumentType.OfficialIntermediateScores)
                     {
 
-                        if (rewardRecord.Field1.Trim() == walletRecord.WalletId.Trim())
+                        if (rewardRecord.Field1.Trim() == walletRecord.ID.Trim())
                         {
-                            Log("ID found: " + walletRecord.WalletName);
-                            var searchRes = newList.Find(x => ((dynamic)x).WalletId == walletRecord.WalletId);
+                            Log("ID found: " + walletRecord.Name);
+                            var searchRes = newList.Find(x => ((dynamic)x).ID == walletRecord.ID);
                             if (searchRes == null)
                             {
                                 dynamic record = new ExpandoObject();
-                                record.Name = walletRecord.WalletName;
-                                record.WalletId = walletRecord.WalletId;
+                                record.Name = walletRecord.Name;
+                                record.ID = walletRecord.ID;
                                 record.Score = rewardRecord.Field2.ToString();
                                 newList.Add(record);
                             }
@@ -481,7 +475,7 @@ namespace Qubic_Resultfilter
                 }
 
                 // Für jeden Eintrag in der rewards Liste, durch unsere Liste gehen und den Wert ergänzen
-                //Console.WriteLine(record.WalletId + " - " + record.Qubics);
+                //Console.WriteLine(record.ID + " - " + record.Qubics);
             }
 
 
