@@ -8,6 +8,9 @@
 - Drag Drop support. Just drop new score or revenues file into the app window and processing starts (if autoprocess checkbox ticked)
 - Auto-Save of resulting files.
 
+### See also my Buildmachine to build many efi files fast:   
+https://github.com/ashupp/Qubic-Buildmachine
+
 ![image](https://user-images.githubusercontent.com/1867828/201519043-908f7c54-32cf-467c-9521-d762e6a32886.png)
 
 
