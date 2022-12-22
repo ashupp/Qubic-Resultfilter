@@ -221,18 +221,7 @@ namespace Qubic_Resultfilter
 
                         tmpCopyOfLine = tmpCopyOfLine.Replace(" - ", ";");
                         targetLinesScore.Add(tmpCopyOfLine);
-
-
                     }
-
-                    
-
-
-
-
-               
-
-                    
                 }
 
 
@@ -317,6 +306,41 @@ namespace Qubic_Resultfilter
                 {
                     Process.Start(targetPercentageFile);
                 }
+            }
+            else if (currentFileContents.Contains(" - "))
+            {
+                // File type should be: official score
+                Log("File type: official intermediate scores");
+
+
+                foreach (var line in currentFileLines)
+                {
+                    var tmpCopyOfLine = line;
+                    // Special case when miner was kicked out - add score 0
+                    if (tmpCopyOfLine.StartsWith("-"))
+                    {
+                        // führendes Zeichen tauschen
+                        tmpCopyOfLine = tmpCopyOfLine.Replace("-", "");
+                        tmpCopyOfLine += " - 0";
+                    }
+
+                    tmpCopyOfLine = tmpCopyOfLine.Replace(" - ", ";");
+                    targetLines.Add(tmpCopyOfLine);
+                }
+
+                var targetString = string.Join(Environment.NewLine, targetLines);
+
+                var dateTimeString = DateTime.Now.ToString("yyyyddM-HHmmss");
+
+
+                var targetPercentageFile = Path.Combine(Settings.Default.outputFileDirectory, dateTimeString + "-qrf-intermediate-scores-output.csv");
+                CreateCSV(QubicDocumentType.OfficialIntermediateScores, Settings.Default.ownIDsPath, targetString, targetPercentageFile);
+                Log("File created: " + targetPercentageFile);
+                if (Settings.Default.openFileAfterGeneration)
+                {
+                    System.Diagnostics.Process.Start(targetPercentageFile);
+                }
+
 
             }
             else
